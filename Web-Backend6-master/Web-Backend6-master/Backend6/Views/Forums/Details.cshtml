@@ -1,0 +1,43 @@
+﻿@model Backend6.Models.Forum
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>@Model.Name</h2>
+<p>@Model.Description</p>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <p>
+        <a asp-action="Create" asp-controller="ForumTopics" asp-route-forumId="@Model.Id">Create new topic</a>
+    </p>
+}
+
+
+<div class="panel panel-default">
+    <table class="table table-striped">
+        <tbody>
+            @foreach (var topic in Model.ForumTopics)
+            {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-controller="ForumTopics" asp-route-id="@topic.Id" style="font-size: 1.3em">@topic.Name</a><br />
+                    @topic.Creator.Email, Monday, @topic.Created
+                </td>
+                <td style="width: 100px">
+                    @topic.ForumMessages.Count reply (ies)
+                </td>
+                <td style="width: 220px">
+                    @if (topic.ForumMessages?.ToArray().Length > 0)
+                    {
+                        <text>@topic.ForumMessages?.ToArray()[topic.ForumMessages.ToArray().Length - 1].Creator?.Email;</text>
+                        <br />
+                        <text>@topic.ForumMessages?.ToArray()[topic.ForumMessages.ToArray().Length - 1].Created;</text>
+                    }
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
